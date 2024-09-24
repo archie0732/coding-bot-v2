@@ -37,6 +37,8 @@ export default new CoffeeCommand({
       const driveURL = modalInteraction.fields.getTextInputValue("TA_hw_URL");
       const input = modalInteraction.fields.getTextInputValue("TA_sample_input");
       const output = modalInteraction.fields.getTextInputValue("TA_except_output");
+
+      
     });
   },
 
