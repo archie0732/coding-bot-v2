@@ -1,42 +1,108 @@
 import { spawn } from "child_process";
-import { resolve } from "path";
+import { resolve as resolvePath } from "path";
 
-export const checkresult = (input: string, expectedOutput: string) =>
-  new Promise((r, reject) => {
-    const compile = spawn("g++", [
-      resolve("./assert/hw.cpp"),
-      "-o",
-      resolve("./assert/hw"),
-    ]);
-    let result = "";
-    compile.on("close", (code) => {
-      if (code !== 0) {
-        reject("compiler error");
-      }
+export class JudgeCompileError extends Error {
+  error: string;
+  file: string;
 
-      const run = spawn(resolve("cache", "hw.cpp"));
+  constructor(message: string, file: string) {
+    super("Compiler exited with a non-zero code");
+    this.error = message;
+    this.file = file;
+  }
+}
 
-      run.stdin.write(input);
-      run.stdin.end();
+export class JudgeRuntimeError extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+}
 
-      run.stdout.on("data", (data) => {
-        result += data;
-      });
+export class JudgeWrongAnswerError extends Error {
+  expected: string;
+  got: string;
 
-      run.on("close", (code) => {
-        if (code !== 0) {
-          reject("runtime error");
-        }
+  constructor(expected: string, got: string) {
+    super(`Wrong Answer!\n- Expected:\n${expected}\n- Got\n${got}`);
+    this.expected = JSON.stringify(expected);
+    this.got = JSON.stringify(got);
+  }
+}
 
-        if (
-          result.replaceAll("\\r\\n", "\\n")
-          == expectedOutput.replaceAll("\\r\\n", "\\n")
-        ) {
-          r("ok");
-        }
-        else {
-          r(result);
-        }
-      });
-    });
+export class JudgeTimeLimitExceededError extends Error {
+  limit: number;
+  constructor(limit: number) {
+    super(`Time limit exceeded: ${limit}`);
+    this.limit = limit;
+  }
+}
+
+const normalize = (str: string) => str.replaceAll("\\r\\n", "\\n");
+
+const compileFile = (inFilePath: string, outFilePath: string) => new Promise<void>((resolve, reject) => {
+  const compiler = spawn("g++", [
+    inFilePath,
+    "-o",
+    outFilePath,
+  ]);
+
+  let stderrChunks: Uint8Array[] = [];
+  compiler.stderr.on("data", (data: Uint8Array) => {
+    stderrChunks = stderrChunks.concat(data);
   });
+
+  compiler.on("exit", (code) => {
+    if (code != 0) {
+      const stderrContent = Buffer.concat(stderrChunks).toString();
+      reject(new JudgeCompileError(stderrContent, inFilePath));
+    }
+    resolve();
+  });
+});
+
+const executeJudge = (filePath: string, input: string, expectedOutput: string) => new Promise<void>((resolve, reject) => {
+  const process = spawn(filePath);
+
+  process.stdin.write(input);
+  process.stdin.end();
+
+  let stderrChunks: Uint8Array[] = [];
+  process.stderr.on("data", (data: Uint8Array) => {
+    stderrChunks = stderrChunks.concat(data);
+  });
+
+  let stdoutChunks: Uint8Array[] = [];
+  process.stdout.on("data", (data: Uint8Array) => {
+    stdoutChunks = stdoutChunks.concat(data);
+  });
+
+  process.on("exit", (code) => {
+    if (code != 0) {
+      const stderrContent = Buffer.concat(stderrChunks).toString();
+      return reject(new JudgeRuntimeError(stderrContent));
+    };
+
+    const result = Buffer.concat(stdoutChunks).toString();
+    const normalizedOutput = normalize(result);
+    const normalizedExpected = normalize(expectedOutput);
+
+    if (normalizedOutput == normalizedExpected || normalizedOutput == normalizedExpected + "\n") {
+      resolve();
+    }
+    else {
+      reject(new JudgeWrongAnswerError(normalizedExpected, normalizedOutput));
+    }
+  });
+});
+
+export const checkresult = async (input: string, expectedOutput: string) => {
+  const cacheFolder = process.env["CACHE_FOLDER"] || ".cache";
+
+  const inFilePath = resolvePath(cacheFolder, "hw.cpp");
+  const outFilePath = resolvePath(cacheFolder, "hw.exe");
+
+  await compileFile(inFilePath, outFilePath);
+  const judgeResult = await executeJudge(outFilePath, input, expectedOutput);
+
+  return judgeResult;
+};
