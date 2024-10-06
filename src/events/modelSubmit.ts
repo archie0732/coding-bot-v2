@@ -14,16 +14,16 @@ export default new CoffeeEvent({
       const command = this.commands.get(commandName);
 
       if (!command) return;
-      if (!command.onModelSubmit) return;
+      if (!command.onModalSubmit) return;
 
       if (command.defer) {
         await interation.deferUpdate();
       }
 
-      await command.onModelSubmit.call(this, interation, modelId);
+      await command.onModalSubmit.call(this, interation, modelId);
     }
     catch (error) {
-      logger.error(error);
+      logger.error("on modal submit", error);
     }
   },
 });

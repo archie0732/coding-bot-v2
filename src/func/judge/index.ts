@@ -1,7 +1,7 @@
 import { EmbedBuilder, AttachmentBuilder, codeBlock } from "discord.js";
 import { checkresult, JudgeCompileError, JudgeRuntimeError, JudgeTimeLimitExceededError, JudgeWrongAnswerError } from "./check";
 import { dlfromDrive, DriveDownloadError, DriveWriteDiskError } from "./dl";
-import { assetAPlus, assetF, assethaveC, assetSteve, assetYukiImage, aasetAniYa } from "../../utils/assets";
+import { assetF, assetSteve, assetYukiImage, aasetAniYa } from "../../utils/assets";
 import logger from "../../class/logger";
 
 export const TAjudge = async (input: string, output: string, url: string) => {
@@ -15,8 +15,7 @@ export const TAjudge = async (input: string, output: string, url: string) => {
     embed = new EmbedBuilder()
       .setTitle("Accept")
       .setDescription("good asian! A++")
-      .setThumbnail(assetAPlus.url)
-      .setImage(assethaveC.url)
+      .setThumbnail("https://ih1.redbubble.net/image.4075847999.0083/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg")
       .setFooter({ text: "archie0732's coffee bot" });
   }
   catch (e) {
@@ -51,7 +50,6 @@ export const TAjudge = async (input: string, output: string, url: string) => {
           .setTitle("Compile Error")
           .setDescription(`error on: ${error.error}`)
           .setThumbnail(assetF.url)
-          .setImage(assetSteve.url)
           .setFooter({ text: "arhie0732's coffee bot" });
         break;
       }
@@ -64,7 +62,6 @@ export const TAjudge = async (input: string, output: string, url: string) => {
           .setTitle(`${error.message}`)
           .setDescription("Failure ~")
           .setThumbnail(assetF.url)
-          .setImage(assetSteve.url)
           .setFooter({ text: "arhie0732's coffee bot" });
         break;
       }
@@ -77,7 +74,6 @@ export const TAjudge = async (input: string, output: string, url: string) => {
           .setTitle("Wrong Answer")
           .setDescription(`- Expected output:\n${codeBlock(error.expected)}\nReceive output:\n${codeBlock(error.got)}`)
           .setThumbnail(aasetAniYa.url)
-          .setImage(assetYukiImage.url)
           .setFooter({ text: "archie0732's coffee bot" });
         break;
       }
@@ -86,6 +82,7 @@ export const TAjudge = async (input: string, output: string, url: string) => {
         const error = e as JudgeTimeLimitExceededError;
         embed = new EmbedBuilder()
           .setTitle("Time Limit ExceedeError")
+          .setThumbnail("https://wall.bahamut.com.tw/B/62/e42fda5c1787f451318aa681c86ec353_6281783.JPG")
           .setDescription(`超時了，哈哈\n${error.limit}`);
         break;
       }

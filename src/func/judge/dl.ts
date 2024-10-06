@@ -1,3 +1,4 @@
+import logger from "@/class/logger";
 import { resolve } from "path";
 
 // https://drive.google.com/file/d/1dXuRhKEKOHJ_tfMMPjRCi-auOdRkpjRA/view?usp=drive_link
@@ -47,6 +48,7 @@ export const dlfromDrive = async (token: string) => {
 
   try {
     await Bun.write(file, data);
+    logger.debug("下載成功");
   }
   catch (error) {
     if (!(error instanceof Error)) return;

@@ -8,6 +8,8 @@ import {
 import { CoffeeCommand } from "../class/command";
 import { TAjudge } from "../func/judge/index";
 
+import logger from "@/class/logger";
+
 const modals = {
   TA_hw_modal: new ModalBuilder()
     .setCustomId("judge-TA_hw_modal")
@@ -48,6 +50,8 @@ export default new CoffeeCommand({
     const driveURL = interaction.fields.getTextInputValue("TA_hw_URL");
     const input = interaction.fields.getTextInputValue("TA_sample_input");
     const output = interaction.fields.getTextInputValue("TA_except_output");
+
+    logger.debug("取得i/o資料成功");
 
     const payload = await TAjudge(input, output, driveURL);
 

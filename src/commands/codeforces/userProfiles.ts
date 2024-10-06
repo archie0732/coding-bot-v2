@@ -8,13 +8,13 @@ import type { CodeforcesAPI } from "@/api/codeforces/user";
 
 export default new CoffeeCommand({
   builder: new SlashCommandBuilder()
-    .setName("codeforcesPorfiles")
+    .setName("codeforce_user")
     .setNameLocalization("zh-TW", "codeforce個人")
     .setDescription("查看用戶的個人資料")
     .addStringOption(
       new SlashCommandStringOption()
         .setName("username")
-        .setNameLocalization("zh-TW", "codeforces用戶名")
+        .setNameLocalization("zh-TW", "名稱")
         .setDescription("username in codefroces")
         .setRequired(true)),
   ephemeral: true,
