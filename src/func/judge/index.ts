@@ -86,7 +86,7 @@ export const TAjudge = async (input: string, output: string, url: string) => {
         const error = e as JudgeTimeLimitExceededError;
         embed = new EmbedBuilder()
           .setTitle("Time Limit ExceedeError")
-          .setDescription(`超時了，哈ㄏㄚ\n${error.limit}`);
+          .setDescription(`超時了，哈哈\n${error.limit}`);
         break;
       }
 
@@ -99,7 +99,7 @@ export const TAjudge = async (input: string, output: string, url: string) => {
       }
     }
 
-    logger.error(e);
+    logger.error("aaaaaa", e);
   }
 
   return {

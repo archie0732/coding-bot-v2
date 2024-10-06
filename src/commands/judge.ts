@@ -44,7 +44,7 @@ export default new CoffeeCommand({
   async execute(interaction) {
     await interaction.showModal(modals.TA_hw_modal);
   },
-  async onModelSubmit(interaction) {
+  async onModalSubmit(interaction) {
     const driveURL = interaction.fields.getTextInputValue("TA_hw_URL");
     const input = interaction.fields.getTextInputValue("TA_sample_input");
     const output = interaction.fields.getTextInputValue("TA_except_output");
