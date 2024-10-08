@@ -68,7 +68,6 @@ export const TAjudge = async (input: string, output: string, url: string) => {
 
       case JudgeWrongAnswerError: {
         files.push(aasetAniYa.attachment);
-        files.push(assetYukiImage.attachment);
         const error = e as JudgeWrongAnswerError;
         embed = new EmbedBuilder()
           .setTitle("Wrong Answer")
