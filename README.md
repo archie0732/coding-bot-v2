@@ -17,10 +17,16 @@ bun install
 
 ## Command
 
-- `/leetcode` + `<username>`: 查詢leetcode 的該名用戶
+- `/leetcodeProfile` + `<username>`: 查詢leetcode 的該名用戶
+>包含
+>
+> `使用者名稱` `解題數` `題目正確率` `最近答題狀況`
+
+- `/codeforcePorfile` + `<username>`: 查詢codeforce 的該名用戶
 >包含
 >
 > `使用者名稱` `解題數` `題目正確率` `最近答題狀況`
 
 
+- `/judge` 改作業： 需要同意存取google drive ，詳情： `googledriveAPI`
 
