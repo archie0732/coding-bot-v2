@@ -10,6 +10,12 @@
 ```bash
 bun install
 ```
+本地啟動
+
+```bash
+bun run dev
+```
+
 >[!note]
 > 請先取得 `google drive api`
 > 若沒有請向開發者 archie0732 索取
